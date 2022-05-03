@@ -1,0 +1,5 @@
+yc_token     = "<your-token>"
+yc_cloud_id  = "<your-cloud-id>"
+yc_folder_id = "your-folder-id"
+yc_zone      = "ru-central1-a"
+ssh_pub      = "~/.ssh/id_rsa.pub"
