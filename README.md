@@ -11,6 +11,7 @@ cp terraform.tfvars.example terraform.tfvars
 
 for running 
 ```bash
+terraform get
 terraform init
 terraform plan
 terraform apply -auto-approve
