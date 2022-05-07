@@ -15,3 +15,43 @@ resource "null_resource" "yc-kubeconfig" {
     EOT
   }
 }
+
+resource "helm_release" "ingress-nginx" {
+  name = "ingress-nginx"
+
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  depends_on = [
+    null_resource.yc-kubeconfig,
+  ]
+}
+
+data "kubernetes_service" "ingress-nginx-controller" {
+  metadata {
+    name = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
+  }
+
+  depends_on = [
+    helm_release.ingress-nginx,
+  ]
+}
+
+data "yandex_dns_zone" "somikhailov_fun" {
+  name = "somikhailov-fun"
+}
+
+resource "yandex_dns_recordset" "app" {
+  zone_id = data.yandex_dns_zone.somikhailov_fun.id
+  name    = "app"
+  type    = "A"
+  ttl     = 200
+  data    = [data.kubernetes_service.ingress-nginx-controller.status.0.load_balancer.0.ingress.0.ip]
+
+  depends_on = [
+    helm_release.ingress-nginx,
+  ]
+}
