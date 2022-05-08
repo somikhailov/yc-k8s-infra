@@ -18,6 +18,7 @@ resource "null_resource" "yc-kubeconfig" {
 
 module "k8s_services" {
   source = "./terraform/modules/k8s_services"
+  email  = var.email
 
   depends_on = [
     null_resource.yc-kubeconfig,

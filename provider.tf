@@ -12,6 +12,10 @@ terraform {
       source  = "yandex-cloud/yandex"
       version = "0.74.0"
     }
+    kubectl = {
+      source = "gavinbunney/kubectl"
+      version = "1.14.0"
+    }
   }
 }
 
@@ -22,6 +26,10 @@ provider "helm" {
 }
 
 provider "kubernetes" {
+  config_path = "~/.kube/config"
+}
+
+provider "kubectl" {
   config_path = "~/.kube/config"
 }
 

@@ -9,3 +9,7 @@ variable "yc_cloud_id" {
 variable "yc_folder_id" {
   type = string
 }
+
+variable "email" {
+  type = string
+}
