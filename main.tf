@@ -16,27 +16,11 @@ resource "null_resource" "yc-kubeconfig" {
   }
 }
 
-resource "helm_release" "ingress-nginx" {
-  name = "ingress-nginx"
-
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  chart            = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  create_namespace = true
+module "k8s_services" {
+  source = "./terraform/modules/k8s_services"
 
   depends_on = [
     null_resource.yc-kubeconfig,
-  ]
-}
-
-data "kubernetes_service" "ingress-nginx-controller" {
-  metadata {
-    name = "ingress-nginx-controller"
-    namespace = "ingress-nginx"
-  }
-
-  depends_on = [
-    helm_release.ingress-nginx,
   ]
 }
 
@@ -49,9 +33,5 @@ resource "yandex_dns_recordset" "app" {
   name    = "app"
   type    = "A"
   ttl     = 200
-  data    = [data.kubernetes_service.ingress-nginx-controller.status.0.load_balancer.0.ingress.0.ip]
-
-  depends_on = [
-    helm_release.ingress-nginx,
-  ]
+  data    = [module.k8s_services.external_ip]
 }
