@@ -12,13 +12,18 @@ resource "null_resource" "yc-kubeconfig" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<-EOT
       yc managed-kubernetes cluster get-credentials --id ${module.yc-k8s-infra.k8s_cluster_id} --external --force
+      helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --wait
+      helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --namespace=monitoring --create-namespace -f kube-prometheus-stack/values.yaml --wait
     EOT
   }
 }
 
-module "k8s_services" {
-  source = "./terraform/modules/k8s_services"
-  email  = var.email
+data "kubernetes_service" "ingress-nginx-controller" {
+
+  metadata {
+    name      = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
+  }
 
   depends_on = [
     null_resource.yc-kubeconfig,
@@ -29,10 +34,18 @@ data "yandex_dns_zone" "somikhailov_fun" {
   name = "somikhailov-fun"
 }
 
-resource "yandex_dns_recordset" "app" {
+resource "yandex_dns_recordset" "prometheus" {
   zone_id = data.yandex_dns_zone.somikhailov_fun.id
-  name    = "app"
+  name    = "prometheus"
   type    = "A"
   ttl     = 200
-  data    = [module.k8s_services.external_ip]
+  data    = [data.kubernetes_service.ingress-nginx-controller.status.0.load_balancer.0.ingress.0.ip]
+}
+
+resource "yandex_dns_recordset" "grafana" {
+  zone_id = data.yandex_dns_zone.somikhailov_fun.id
+  name    = "grafana"
+  type    = "A"
+  ttl     = 200
+  data    = [data.kubernetes_service.ingress-nginx-controller.status.0.load_balancer.0.ingress.0.ip]
 }
