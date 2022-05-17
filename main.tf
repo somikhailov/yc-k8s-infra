@@ -34,6 +34,14 @@ data "yandex_dns_zone" "somikhailov_fun" {
   name = "somikhailov-fun"
 }
 
+resource "yandex_dns_recordset" "app" {
+  zone_id = data.yandex_dns_zone.somikhailov_fun.id
+  name    = "app"
+  type    = "A"
+  ttl     = 200
+  data    = [data.kubernetes_service.ingress-nginx-controller.status.0.load_balancer.0.ingress.0.ip]
+}
+
 resource "yandex_dns_recordset" "prometheus" {
   zone_id = data.yandex_dns_zone.somikhailov_fun.id
   name    = "prometheus"

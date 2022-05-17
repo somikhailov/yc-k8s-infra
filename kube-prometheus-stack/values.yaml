@@ -16,3 +16,11 @@ prometheus:
     path: /
     hosts:
       - prometheus.somikhailov.fun
+
+controller:
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
