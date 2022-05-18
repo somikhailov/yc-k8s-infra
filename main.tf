@@ -12,8 +12,7 @@ resource "null_resource" "yc-kubeconfig" {
     interpreter = ["/bin/bash", "-c"]
     command     = <<-EOT
       yc managed-kubernetes cluster get-credentials --id ${module.yc-k8s-infra.k8s_cluster_id} --external --force
-      helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --wait
-      helm upgrade --install prometheus prometheus-community/kube-prometheus-stack --namespace=monitoring --create-namespace -f kube-prometheus-stack/values.yaml --wait
+      helmfile sync
     EOT
   }
 }
