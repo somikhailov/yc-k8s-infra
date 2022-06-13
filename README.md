@@ -9,16 +9,24 @@ copy example and set your variables
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-for running 
+for running infra-layer
 ```bash
-terraform get
 terraform init
+terraform get
 terraform plan
 terraform apply -auto-approve
 ```
 
+for running dns-layer
+```bash
+terraform -chdir=terraform/dns-layer init
+terraform -chdir=terraform/dns-layer plan
+terraform -chdir=terraform/dns-layer apply -auto-approve
+```
+
 for destroying
 ```bash
+terraform -chdir=terraform/dns-layer destroy -auto-approve
 terraform destroy -auto-approve
 ```
 
