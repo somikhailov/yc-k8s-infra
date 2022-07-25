@@ -1,0 +1,17 @@
+replicaCount: 3
+
+metrics:
+  enabled: true
+  service:
+    annotations:
+      prometheus.io/port: "10254"
+      prometheus.io/scrape: "true"
+
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+
+nodeSelector: 
+  pool: infra

@@ -1,0 +1,55 @@
+master:
+  replicaCount: 3
+  persistence:
+    storageClass: yc-network-hdd
+    size: 2Gi
+  tolerations:
+    - key: node-role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+  nodeSelector: 
+    pool: infra
+
+ingest:
+  replicaCount: 2
+  tolerations:
+    - key: node-role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+  nodeSelector: 
+    pool: infra
+
+data:
+  replicaCount: 3
+  persistence:
+    storageClass: yc-network-hdd
+    size: 5Gi
+  tolerations:
+    - key: node-role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+  nodeSelector: 
+    pool: infra
+
+coordinating:
+  replicaCount: 2
+  tolerations:
+    - key: node-role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+  nodeSelector: 
+    pool: infra
+
+metrics:
+  enabled: true
+  tolerations:
+    - key: node-role
+      operator: Equal
+      value: infra
+      effect: NoSchedule
+  nodeSelector: 
+    pool: infra

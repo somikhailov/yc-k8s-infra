@@ -1,0 +1,4 @@
+yc_token     = "<your-token>"
+yc_cloud_id  = "<your-cloud-id>"
+yc_folder_id = "your-folder-id"
+email        = "you-email@example.com"

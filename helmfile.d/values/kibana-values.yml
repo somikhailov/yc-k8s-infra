@@ -1,0 +1,24 @@
+elasticsearch:
+  hosts: 
+    - elasticsearch
+  port: 9200
+  security:
+    auth:
+      enabled: true
+      kibanaPassword: "OtusPassword"
+      
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+  path: /
+  hostname: kibana.somikhailov.fun
+
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+
+nodeSelector: 
+  pool: infra

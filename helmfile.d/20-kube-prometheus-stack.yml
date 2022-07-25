@@ -1,0 +1,50 @@
+repositories:
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+
+releases:
+- name: prometheus 
+  namespace: monitoring
+  createNamespace: true
+  chart: prometheus-community/kube-prometheus-stack
+  version: 36.2.1
+  wait: true
+  values: 
+    - ./values/prometheus-values.yml
+  hooks:
+    - events:  ["postsync"]
+      showlogs: true
+      command: kubectl
+      args:    ["apply", "-f", "secrets/prom-auth.yaml"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "alertmanagerconfigs.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "alertmanagers.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "podmonitors.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "probes.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "prometheuses.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "prometheusrules.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "servicemonitors.monitoring.coreos.com"]
+    - events:  ["post-delete"]
+      showlogs: true
+      command: kubectl
+      args:    ["delete", "crd", "thanosrulers.monitoring.coreos.com"]

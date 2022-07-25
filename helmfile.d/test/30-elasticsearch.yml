@@ -1,0 +1,13 @@
+repositories:
+- name: bitnami
+  url: https://charts.bitnami.com/bitnami
+
+releases:
+- name: elasticsearch 
+  namespace: logging
+  createNamespace: true
+  chart: bitnami/elasticsearch
+  version: 18.2.15
+  wait: true
+  values: 
+    - ./values/elasticsearch-values.yml

@@ -1,0 +1,13 @@
+repositories:
+- name: bitnami
+  url: https://charts.bitnami.com/bitnami
+
+releases:
+- name: kibana
+  namespace: logging
+  createNamespace: true
+  chart: bitnami/kibana
+  version: 10.1.12
+  wait: true
+  values: 
+    - ./values/kibana-values.yml
