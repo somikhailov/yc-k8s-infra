@@ -1,5 +1,5 @@
-# infra
-This part of project contains code for creating k8s infra in yandex cloud. 
+# yc-k8s-infra
+This project contains code for creating k8s infra in yandex cloud with monitoring stack (prometheus + grafana) and logging stack (EFK).  
 
 ---
 ## Usage

@@ -1,0 +1,13 @@
+repositories:
+- name: stable
+  url: https://charts.helm.sh/stable
+
+releases:
+- name: fluent-bit
+  namespace: logging
+  createNamespace: true
+  chart: stable/fluent-bit
+  version: 2.10.3
+  wait: true
+  values: 
+    - ./values/fluent-bit-values.yml

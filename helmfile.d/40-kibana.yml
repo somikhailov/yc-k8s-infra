@@ -1,0 +1,13 @@
+releases:
+- name: kibana
+  namespace: logging
+  createNamespace: true
+  chart: charts/kibana
+  wait: true
+  values: 
+    - ./values/kibana-values.yml
+  hooks:
+    - events:  ["postsync"]
+      showlogs: true
+      command: kubectl
+      args:    ["apply", "-f", "secrets/kibana-auth.yaml"]
